@@ -1,20 +1,20 @@
-PO Sarah: Good morning, everyone. Let's start by reviewing the previous sprint. Alex, how are things going with JIRA-123, the user profile enhancements?
+PO dmitriybaikov: Good morning, everyone. Let's start by reviewing the previous sprint. shubhampareek4000, how are things going with JIRA-123, the user profile enhancements?
 
-DTM Alex: JIRA-123 is progressing well. I've completed the UI improvements and added the recent activity section. However, there was a change request from the design team for some color adjustments. I'm using the "Material-UI" library, and this change is taking longer due to its theming system. I'd say it's about 90% complete.
+DTM shubhampareek4000: JIRA-123 is progressing well. I've completed the UI improvements and added the recent activity section. However, there was a change request from the design team for some color adjustments. I'm using the "Material-UI" library, and this change is taking longer due to its theming system. I'd say it's about 90% complete.
 
-PO Sarah: Thanks, Alex. What about JIRA-124, the image uploads?
+PO dmitriybaikov: Thanks, shubhampareek4000. What about JIRA-124, the image uploads?
 
-DTM Alex: JIRA-124 is also in a good state. The image upload functionality is ready, but as mentioned in the last meeting, we faced some delays due to the external API integration using the "Imgur" library. Imgur had some downtime last week, which impacted our progress. We've implemented retries, but it's still affecting our timeline. I'd say we're at about 80% completion.
+DTM shubhampareek4000: JIRA-124 is also in a good state. The image upload functionality is ready, but as mentioned in the last meeting, we faced some delays due to the external API integration using the "Imgur" library. Imgur had some downtime last week, which impacted our progress. We've implemented retries, but it's still affecting our timeline. I'd say we're at about 80% completion.
 
-PO Sarah: That's good to know. We'll keep an eye on the external API integration. Emily, how about JIRA-125, the complex one?
+PO dmitriybaikov: That's good to know. We'll keep an eye on the external API integration. gbaringer, how about JIRA-125, the complex one?
 
-DTM Emily: JIRA-125 turned out to be more complex than we initially thought. It involves integrating with the "TensorFlow" library for machine learning capabilities. We've run into some issues with model training and compatibility. I might need to break this down into subtasks, focusing on the data preprocessing part first. Right now, I'd estimate it at about 30% complete.
+DTM gbaringer: JIRA-125 turned out to be more complex than we initially thought. It involves integrating with the "TensorFlow" library for machine learning capabilities. We've run into some issues with model training and compatibility. I might need to break this down into subtasks, focusing on the data preprocessing part first. Right now, I'd estimate it at about 30% complete.
 
-PO Sarah: Thanks for the detailed update, Emily. Feel free to create subtasks as needed, and let's continue discussing this in the team later. John, any blocked or delayed tasks from the previous sprint?
+PO dmitriybaikov: Thanks for the detailed update, gbaringer. Feel free to create subtasks as needed, and let's continue discussing this in the team later. John, any blocked or delayed tasks from the previous sprint?
 
 SM John: Yes, we still have a blocker on JIRA-126 due to the third-party API outage. We've been in touch with their support, and they're working on it, but it's impacting our timeline significantly. This API is critical for our payment processing. Also, JIRA-127 is back on track now after resolving the requirements clarification issue. It's about 80% complete.
 
-PO Sarah: Great, thank you, John. Now, let's move on to the new Jira user stories and tasks for this sprint. I'll present them one by one:
+PO dmitriybaikov: Great, thank you, John. Now, let's move on to the new Jira user stories and tasks for this sprint. I'll present them one by one:
 
 User Story 1 - Enhance User Profile Page
 
@@ -35,34 +35,34 @@ User Story 4 - API Integration
 
     JIRA-134: Integrate with a new payment gateway using the "Stripe" library for our subscription service.
 
-PO Sarah: Now, let's delve into the crucial phase of estimating and assigning these Jira user stories and tasks. Development team, your insights here are invaluable. Please provide your initial estimates for each ticket, but don't hesitate to raise any concerns or suggest additional subtasks as we go through them. Our goal is to have a clear understanding of what's ahead and to ensure everyone is on the same page regarding complexity and effort.
+PO dmitriybaikov: Now, let's delve into the crucial phase of estimating and assigning these Jira user stories and tasks. Development team, your insights here are invaluable. Please provide your initial estimates for each ticket, but don't hesitate to raise any concerns or suggest additional subtasks as we go through them. Our goal is to have a clear understanding of what's ahead and to ensure everyone is on the same page regarding complexity and effort.
 
-DTM Alex: Sure, let's start with User Story 1 - JIRA-128. I estimate it at 5 story points based on the design changes and UI improvements.
+DTM shubhampareek4000: Sure, let's start with User Story 1 - JIRA-128. I estimate it at 5 story points based on the design changes and UI improvements.
 
-DTM Emily: For JIRA-129, I'd estimate it at 3 points. The image uploads part is straightforward, but the external API integration adds some complexity.
+DTM gbaringer: For JIRA-129, I'd estimate it at 3 points. The image uploads part is straightforward, but the external API integration adds some complexity.
 
 DTM Mike: Moving on to User Story 2 - JIRA-130, optimizing database queries can be quite intricate. I'd suggest 8 points for this one.
 
 DTM Sam: Agreed, and considering the interdependence with JIRA-131, I'd also rate it at 8 points. Both are critical for performance improvements.
 
-DTM Alex: Now, for User Story 3 - JIRA-132, addressing critical bugs is essential, but some might have complex root causes. I'd estimate it at 5 points.
+DTM shubhampareek4000: Now, for User Story 3 - JIRA-132, addressing critical bugs is essential, but some might have complex root causes. I'd estimate it at 5 points.
 
-DTM Emily: For JIRA-133, fixing the usability issue in the login flow, I'd rate it at 3 points. It seems less complex compared to the other bug fixes.
+DTM gbaringer: For JIRA-133, fixing the usability issue in the login flow, I'd rate it at 3 points. It seems less complex compared to the other bug fixes.
 
 DTM Mike: Lastly, User Story 4 - JIRA-134, integrating with the new payment gateway using the "Stripe" library can be intricate due to various payment scenarios. I'd suggest 10 points for this one.
 
-PO Sarah: Thanks for your estimates, team. These are valuable inputs. Now, let's discuss potential subtasks or any concerns you might have. Are there any dependencies we need to consider?
+PO dmitriybaikov: Thanks for your estimates, team. These are valuable inputs. Now, let's discuss potential subtasks or any concerns you might have. Are there any dependencies we need to consider?
 
 DTM Sam: For JIRA-130 and JIRA-131, since they're interdependent, we should make sure the database optimization is complete before moving to caching.
 
-DTM Alex: I agree, Sam. We should also consider creating subtasks for the different types of optimizations in JIRA-130.
+DTM shubhampareek4000: I agree, Sam. We should also consider creating subtasks for the different types of optimizations in JIRA-130.
 
-DTM Emily: Regarding JIRA-125, as mentioned earlier, I'll create subtasks to handle the different stages of the machine learning integration.
+DTM gbaringer: Regarding JIRA-125, as mentioned earlier, I'll create subtasks to handle the different stages of the machine learning integration.
 
-PO Sarah: Excellent, Emily. That way, we can manage it more effectively. Keep an eye on the interdependencies and communicate any issues promptly.
+PO dmitriybaikov: Excellent, gbaringer. That way, we can manage it more effectively. Keep an eye on the interdependencies and communicate any issues promptly.
 
 SM John: Also, let's consider possible risks, especially with JIRA-124 and the external API. We should have a contingency plan in case of further delays.
 
-PO Sarah: Good point, John. We'll set up a contingency plan and ensure that the team is aware of it.
+PO dmitriybaikov: Good point, John. We'll set up a contingency plan and ensure that the team is aware of it.
 
-PO Sarah: With that, we have a solid plan for the sprint. Let's proceed with the assignments and get to work. We'll keep the lines of communication open, and if any new subtasks arise, we can address them promptly during our daily stand-ups. Thank you, everyone!
+PO dmitriybaikov: With that, we have a solid plan for the sprint. Let's proceed with the assignments and get to work. We'll keep the lines of communication open, and if any new subtasks arise, we can address them promptly during our daily stand-ups. Thank you, everyone!

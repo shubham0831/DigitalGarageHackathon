@@ -1,4 +1,146 @@
+meeting_notes = '''
+Here are the results for the tickets mentioned in the meeting:
+
+jira_ticket_number: CLOUD-467
+ticket_description: Enhance user profile UI and add recent activity section
+user: shubhampareek4000
+action_item: Nothing to do
+previous_release_version: 4.34
+suggested_release_version: 4.34  
+previous_story_points: 5
+suggested_story_points: 5
+reasoning: On track for release
+
+jira_ticket_number: CLOUD-46
+ticket_description: Implement image uploads for user profiles
+user: dmitriybaikov  
+action_item: Monitor external API integration
+previous_release_version: 4.34
+suggested_release_version: 4.34
+previous_story_points: 5 
+suggested_story_points: 7
+reasoning: Facing delays due to Imgur API downtime which is critical for image uploads. Increasing story points to account for external dependency.
+
+jira_ticket_number: CLOUD-47
+ticket_description: Integrate machine learning capabilities using TensorFlow  
+user: dmitriybaikov
+action_item: Break into subtasks focusing on data preprocessing first
+previous_release_version: 4.34
+suggested_release_version: 4.35 
+previous_story_points: 5
+suggested_story_points: 8
+reasoning: More complex than expected due to model training and compatibility issues with TensorFlow. Breaking into subtasks and pushing to next release.
+
+jira_ticket_number: CLOUD-48
+ticket_description: Not provided
+user: dmitriybaikov  
+action_item: Blocked due to third-party API outage
+previous_release_version: 4.34
+suggested_release_version: 4.35
+previous_story_points: 5
+suggested_story_points: 5 
+reasoning: Dependent on external API so pushing to next release
+
+jira_ticket_number: JIRA-127
+ticket_description: Not provided
+user: shubhampareek4000
+action_item: Nothing to do  
+previous_release_version: 4.34
+suggested_release_version: 4.34
+previous_story_points: 5
+suggested_story_points: 5
+reasoning: Back on track after resolving requirements 
+
+jira_ticket_number: JIRA-128
+ticket_description: Improve user profile page UI 
+user: shubhampareek4000
+action_item: Nothing to do
+previous_release_version: 4.34 
+suggested_release_version: 4.34
+previous_story_points: 5 
+suggested_story_points: 5
+reasoning: On track for release
+
+jira_ticket_number: JIRA-129 
+ticket_description: Implement profile image uploads  
+user: shubhampareek4000
+action_item: Nothing to do
+previous_release_version: 4.34
+suggested_release_version: 4.34
+previous_story_points: 5
+suggested_story_points: 3
+reasoning: Straightforward feature, reducing story points.
+
+jira_ticket_number: JIRA-130
+ticket_description: Optimize database queries using Hibernate
+user: shubhampareek4000
+action_item: Nothing to do
+previous_release_version: 4.34
+suggested_release_version: 4.34
+previous_story_points: 5
+suggested_story_points: 8 
+reasoning: Critical for performance, complex due to optimizing queries with Hibernate
+
+jira_ticket_number: JIRA-131  
+ticket_description: Implement client-side caching using Redis
+user: shubhampareek4000
+action_item: Nothing to do 
+previous_release_version: 4.34
+suggested_release_version: 4.34
+previous_story_points: 5
+suggested_story_points: 8
+reasoning: Critical for performance, complex due to caching implementation with Redis 
+
+jira_ticket_number: JIRA-132
+ticket_description: Address critical bugs reported by QA
+user: shubhampareek4000
+action_item: Nothing to do
+previous_release_version: 4.34
+suggested_release_version: 4.34
+previous_story_points: 5
+suggested_story_points: 5  
+reasoning: Critical bugs but uncertainty around root causes. 
+
+jira_ticket_number: JIRA-133
+ticket_description: Fix usability issue in login flow
+user: dmitriybaikov 
+action_item: Nothing to do
+previous_release_version: 4.34  
+suggested_release_version: 4.34
+previous_story_points: 5 
+suggested_story_points: 3
+reasoning: Less complex compared to other bugs
+
+jira_ticket_number: JIRA-134
+ticket_description: Integrate new payment gateway using Stripe  
+user: dmitriybaikov
+action_item: Set up contingency plan for delays
+previous_release_version: 4.34
+suggested_release_version: 4.34
+previous_story_points: 5
+suggested_story_points: 10
+reasoning: Complex integration due to multiple payment scenarios with Stripe.
+
+In summary, the key highlights from this meeting are:
+
+- Most tickets are on track for 4.34 release. JIRA-125 and JIRA-126 pushed to 4.35 due to dependencies. 
+
+- Critical performance optimization tasks JIRA-130 and JIRA-131 identified and estimated at 8 points each.
+
+- JIRA-124 and JIRA-134 require monitoring of external API integrations. Contingency plans set up.
+
+- JIRA-125 broken into subtasks to simplify machine learning integration.
+
+- Story points adjusted based on task complexity like JIRA-129 reduced to 3 points.
+
+Overall, the team provided estimates for new tasks, identified risks and dependencies to streamline the sprint execution.
+'''
+
 from anthropic import Anthropic, HUMAN_PROMPT, AI_PROMPT
+from slack_sdk import WebClient
+import re
+import json
+from jira import JIRA
 
 def generate_prompt(prompt_dict) -> str:
     generated_prompt = "Here is a conversation between a human and you, go through it and analyze it, and then based on the context, response to the human question"
@@ -85,4 +227,115 @@ completion = anthropic.completions.create(
 
 previousPrompts[last_index]['reply'] = completion.completion
 
-print(completion.completion)
+# print(completion.completion)
+
+# Slack API configuration
+SLACK_TOKEN = ""
+SLACK_CHANNEL = '#slack-bot-test-channel' 
+
+client = WebClient(token=SLACK_TOKEN)
+
+result = client.users_list()
+members = result.data['members']
+
+split_notes = meeting_notes.split("\n\n")
+ticket_dicts = []
+
+keys_to_extract = [
+    'user',
+    'jira_ticket_number',
+    'ticket_description',
+    'action_item',
+    'previous_release_version',
+    'suggested_release_version',
+    'previous_story_points',
+    'suggested_story_points',
+    'reasoning'
+]
+
+for section in split_notes:
+    ticket_dict = {}
+    for key in keys_to_extract:
+        match = re.search(fr'{key}: (.+)', section)
+        if match:
+            ticket_dict[key] = match.group(1)
+    ticket_dicts.append(ticket_dict)
+
+for ticket in ticket_dicts:
+    if 'suggested_story_points' in ticket and ticket['action_item'] != 'Nothing to do':
+        username = ticket['user']
+        str_representation = json.dumps(ticket)
+
+        for m in members:
+            if m['name'] == username:
+                user_id = m['id']
+                # sent message to user, check for response in the future, for now just update the ticket
+                client.chat_postMessage(channel=user_id, text=str_representation)
+
+
+
+def update_story_point(ticket_number):
+    issue = jira.issue("CLOUD-46")
+    issue.update(fields={"customfield_10016": new_story_points})
+
+
+
+
+# Replace these values with your own Jira instance URL and credentials
+JIRA_SERVER = 'https://clouddeployer.atlassian.net'
+JIRA_USERNAME = 'spareek@dons.usfca.edu'
+JIRA_API_TOKEN = ""
+
+# Create a Jira client instance
+jira = JIRA(server=JIRA_SERVER, basic_auth=(JIRA_USERNAME, JIRA_API_TOKEN))
+
+# Specify the project key for which you want to list issues
+project_key = 'CLOUD'  # Replace with the actual project key
+
+# # Retrieve all issues in the specified project
+# issues = jira.search_issues(f'project = {project_key}')
+# print(issues)
+
+# # Specify the key of the existing story you want to update
+# issue_key_to_update = 'YOUR_ISSUE_KEY'  # Replace with the actual issue key
+
+# Retrieve the existing story
+issue = jira.issue("CLOUD-46")
+
+# all_fields = issue.fields
+
+# # print(all_fields)
+# # Print the fields and their values
+# for field_name in issue.raw['fields']:
+#     field_value = issue.raw['fields'][field_name]
+#     print(f'{field_name}: {field_value} \n\n')
+
+# print(existing_issue)
+
+# story_points_field_id = "custo"
+
+# Set the new story points value
+new_story_points = 5  # Replace with the desired story points value
+
+# Update the issue with the new story points value
+issue.update(fields={"customfield_10016": new_story_points})
+
+# # Update specific fields of the existing story
+# # In this example, we'll update the summary and description
+# new_summary = 'Updated Summary'
+# new_description = 'Updated Description'
+
+# # You can update other fields as needed
+# # new_custom_field_value = 'New custom field value'
+
+# # Update the issue with the new field values
+# existing_issue.update(summary=new_summary, description=new_description)
+
+# # You can update other fields as needed
+# # existing_issue.update(customfield_1001=new_custom_field_value)
+
+# # Print the updated issue details
+# print(f'Updated Issue: {existing_issue.key} - {existing_issue.fields.summary}')
+
+
+
