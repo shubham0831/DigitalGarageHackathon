@@ -164,11 +164,6 @@ def generate_prompt(prompt_dict) -> str:
     return generated_prompt, index-1
 
 
-anthropic = Anthropic(
-    # defaults to os.environ.get("ANTHROPIC_API_KEY")
-    
-)
-
 ai_behavior_prompt = '''
     I will be sending you a transcript from a meeting. Based on this transcript I want you to do the following:
 
@@ -202,6 +197,18 @@ ai_behavior_prompt = '''
     Just reply ok to this message, I will send the transcript in the next message.
     '''
 
+# Create a Jira client instance
+jira = JIRA(server=JIRA_SERVER, basic_auth=(JIRA_USERNAME, JIRA_API_TOKEN))
+
+def update_story_point(ticket_number, new_story_points):
+    int_story_points = int(new_story_points)
+    print(f"Updating story points for {ticket_number} to {new_story_points}")
+    issue = jira.issue(ticket_number)
+    # for field_name in issue.raw['fields']:
+    #     field_value = issue.raw['fields'][field_name]
+    #     print(f'{field_name}: {field_value}')
+    issue.update(fields={"customfield_10016": int_story_points})
+
 meeting_transcript_file= open("/Users/shubham/Code/personal/DigitalGarageHackathon/sample_meeting_transcript.txt", "r")
 meeting_transcript = meeting_transcript_file.read()
 meeting_transcript_file.close()
@@ -219,19 +226,15 @@ previousPrompts = {
 
 prompt, last_index = generate_prompt(previousPrompts)
 
-completion = anthropic.completions.create(
-     model="claude-2",
-     max_tokens_to_sample=1000000,
-     prompt=f"{HUMAN_PROMPT} {prompt} {AI_PROMPT}",
- )
+# completion = anthropic.completions.create(
+#      model="claude-2",
+#      max_tokens_to_sample=1000000,
+#      prompt=f"{HUMAN_PROMPT} {prompt} {AI_PROMPT}",
+#  )
 
-previousPrompts[last_index]['reply'] = completion.completion
+# previousPrompts[last_index]['reply'] = completion.completion
 
 # print(completion.completion)
-
-# Slack API configuration
-SLACK_TOKEN = ""
-SLACK_CHANNEL = '#slack-bot-test-channel' 
 
 client = WebClient(token=SLACK_TOKEN)
 
@@ -271,71 +274,9 @@ for ticket in ticket_dicts:
                 user_id = m['id']
                 # sent message to user, check for response in the future, for now just update the ticket
                 client.chat_postMessage(channel=user_id, text=str_representation)
-
-
-
-def update_story_point(ticket_number):
-    issue = jira.issue("CLOUD-46")
-    issue.update(fields={"customfield_10016": new_story_points})
-
-
-
-
-# Replace these values with your own Jira instance URL and credentials
-JIRA_SERVER = 'https://clouddeployer.atlassian.net'
-JIRA_USERNAME = 'spareek@dons.usfca.edu'
-JIRA_API_TOKEN = ""
-
-# Create a Jira client instance
-jira = JIRA(server=JIRA_SERVER, basic_auth=(JIRA_USERNAME, JIRA_API_TOKEN))
-
-# Specify the project key for which you want to list issues
-project_key = 'CLOUD'  # Replace with the actual project key
-
-# # Retrieve all issues in the specified project
-# issues = jira.search_issues(f'project = {project_key}')
-# print(issues)
-
-# # Specify the key of the existing story you want to update
-# issue_key_to_update = 'YOUR_ISSUE_KEY'  # Replace with the actual issue key
-
-# Retrieve the existing story
-issue = jira.issue("CLOUD-46")
-
-# all_fields = issue.fields
-
-# # print(all_fields)
-# # Print the fields and their values
-# for field_name in issue.raw['fields']:
-#     field_value = issue.raw['fields'][field_name]
-#     print(f'{field_name}: {field_value} \n\n')
-
-# print(existing_issue)
-
-# story_points_field_id = "custo"
-
-# Set the new story points value
-new_story_points = 5  # Replace with the desired story points value
-
-# Update the issue with the new story points value
-issue.update(fields={"customfield_10016": new_story_points})
-
-# # Update specific fields of the existing story
-# # In this example, we'll update the summary and description
-# new_summary = 'Updated Summary'
-# new_description = 'Updated Description'
-
-# # You can update other fields as needed
-# # new_custom_field_value = 'New custom field value'
-
-# # Update the issue with the new field values
-# existing_issue.update(summary=new_summary, description=new_description)
-
-# # You can update other fields as needed
-# # existing_issue.update(customfield_1001=new_custom_field_value)
-
-# # Print the updated issue details
-# print(f'Updated Issue: {existing_issue.key} - {existing_issue.fields.summary}')
+                # print(m)
+                if ticket['jira_ticket_number'] == "CLOUD-46" or ticket['jira_ticket_number'] == "CLOUD-47":
+                    update_story_point(ticket['jira_ticket_number'], ticket['suggested_story_points'])
 
 
 
