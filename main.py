@@ -142,19 +142,7 @@ import re
 import json
 from jira import JIRA
 
-anthropic = Anthropic(
-    # defaults to os.environ.get("ANTHROPIC_API_KEY")
-    api_key="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",
-)
 
-# Replace these values with your own Jira instance URL and credentials
-JIRA_SERVER = 'https://clouddeployer.atlassian.net'
-JIRA_USERNAME = 'spareek@dons.usfca.edu'
-JIRA_API_TOKEN =  "ATATT3xFfGF0wLqLVJNZLhHEJbculz_Scm8_MHpibCgFY2eMCn8D-rnZLTM17BsbKiFXma1i5EyOtAfI1o6PPjgOWna3p3t0nmdJGmL7ZR13pxcwSQPYue7OB71KHsLZ18nhB9stkhDFIOMgtzAmxQ_oSZgTUy38AiN3cWPJVdgaTXrAVCnimV0=65316B67"
-
-# Slack API configuration
-SLACK_TOKEN = 'xoxb-86937043857-5570860957041-LcHbvGZ3od57rMIRmG4KwE8A'
-SLACK_CHANNEL = '#slack-bot-test-channel' 
 
 def generate_prompt(prompt_dict) -> str:
     generated_prompt = "Here is a conversation between a human and you, go through it and analyze it, and then based on the context, response to the human question"
