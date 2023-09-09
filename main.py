@@ -142,6 +142,20 @@ import re
 import json
 from jira import JIRA
 
+anthropic = Anthropic(
+    # defaults to os.environ.get("ANTHROPIC_API_KEY")
+    api_key="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",
+)
+
+# Replace these values with your own Jira instance URL and credentials
+JIRA_SERVER = 'https://clouddeployer.atlassian.net'
+JIRA_USERNAME = 'spareek@dons.usfca.edu'
+JIRA_API_TOKEN =  "ATATT3xFfGF0wLqLVJNZLhHEJbculz_Scm8_MHpibCgFY2eMCn8D-rnZLTM17BsbKiFXma1i5EyOtAfI1o6PPjgOWna3p3t0nmdJGmL7ZR13pxcwSQPYue7OB71KHsLZ18nhB9stkhDFIOMgtzAmxQ_oSZgTUy38AiN3cWPJVdgaTXrAVCnimV0=65316B67"
+
+# Slack API configuration
+SLACK_TOKEN = 'xoxb-86937043857-5570860957041-LcHbvGZ3od57rMIRmG4KwE8A'
+SLACK_CHANNEL = '#slack-bot-test-channel' 
+
 def generate_prompt(prompt_dict) -> str:
     generated_prompt = "Here is a conversation between a human and you, go through it and analyze it, and then based on the context, response to the human question"
     index = 0
@@ -269,14 +283,16 @@ for ticket in ticket_dicts:
         username = ticket['user']
         str_representation = json.dumps(ticket)
 
-        for m in members:
-            if m['name'] == username:
-                user_id = m['id']
-                # sent message to user, check for response in the future, for now just update the ticket
-                client.chat_postMessage(channel=user_id, text=str_representation)
-                # print(m)
-                if ticket['jira_ticket_number'] == "CLOUD-46" or ticket['jira_ticket_number'] == "CLOUD-47":
-                    update_story_point(ticket['jira_ticket_number'], ticket['suggested_story_points'])
+        if ticket['jira_ticket_number'] == "CLOUD-46":
+            print(ticket)
+        # for m in members:
+        #     if m['name'] == username:
+        #         user_id = m['id']
+        #         # sent message to user, check for response in the future, for now just update the ticket
+        #         client.chat_postMessage(channel=user_id, text=str_representation)
+        #         # print(m)
+        #         if ticket['jira_ticket_number'] == "CLOUD-46" or ticket['jira_ticket_number'] == "CLOUD-47":
+        #             update_story_point(ticket['jira_ticket_number'], ticket['suggested_story_points'])
 
 
 
